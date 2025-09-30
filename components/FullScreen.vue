@@ -1,0 +1,35 @@
+<template>
+  <button
+    id="full-screen"
+    class="w-12 h-12 flex items-center justify-center rounded-lg text-gray-40 hover:text-black transition-all duration-300"
+    @click="toggleFullScreen"
+  >
+    <IconsMaximize
+      v-if="!isFullScreen"
+      class="w-6 h-6"
+    />
+    <IconsMinimize
+      v-else
+      class="w-6 h-6"
+    />
+  </button>
+</template>
+
+<script setup lang="ts">
+import Clarity from '@microsoft/clarity'
+
+const isFullScreen = ref(false)
+
+const toggleFullScreen = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen()
+
+    isFullScreen.value = true
+    Clarity.event('clickedFullScreen')
+  } else {
+    document.exitFullscreen?.()
+    isFullScreen.value = false
+    Clarity.event('clickedFullScreenExit')
+  }
+}
+</script>
