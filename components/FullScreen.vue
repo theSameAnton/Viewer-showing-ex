@@ -2,7 +2,7 @@
   <button
     id="full-screen"
     class="w-12 h-12 flex items-center justify-center rounded-lg text-gray-40 hover:text-black transition-all duration-300"
-    @click="toggleFullScreen"
+    @click="handleClick"
   >
     <IconsMaximize
       v-if="!isFullScreen"
@@ -17,18 +17,16 @@
 
 <script setup lang="ts">
 import Clarity from '@microsoft/clarity'
+import { useFullScreen } from '@/composables/useFullScreen'
 
-const isFullScreen = ref(false)
+const { isFullScreen, toggleFullScreen } = useFullScreen()
 
-const toggleFullScreen = () => {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen()
+const handleClick = () => {
+  toggleFullScreen()
 
-    isFullScreen.value = true
+  if (!isFullScreen.value) {
     Clarity.event('clickedFullScreen')
   } else {
-    document.exitFullscreen?.()
-    isFullScreen.value = false
     Clarity.event('clickedFullScreenExit')
   }
 }
